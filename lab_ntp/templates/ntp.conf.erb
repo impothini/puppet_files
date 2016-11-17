@@ -1,0 +1,32 @@
+#Managed by Puppet Master for centos
+restrict default ignore
+restrict 127.0.0.1
+# -- CLIENT NETWORK -------
+# restrict 192.168.1.0 mask 255.255.255.0 notrust nomodify notrap
+# --- OUR TIMESERVERS -----
+#restrict 10.81.1.83 mask 255.255.255.255 nomodify notrap noquery
+#server 10.81.1.83
+#restrict 10.81.1.84 mask 255.255.255.255 nomodify notrap noquery
+#server 10.81.1.84
+#restrict 10.64.1.83 mask 255.255.255.255 nomodify notrap noquery
+#server 10.64.1.83
+#restrict 10.64.2.84 mask 255.255.255.255 nomodify notrap noquery
+#server 10.64.2.84
+
+<% @servers.each do |server| -%>
+restrict <%= server%> mask 255.255.255.255 nomodify notrap noquery
+server <%= server%>
+<% end -%>
+
+# --- NTP MULTICASTCLIENT ---
+#multicastclient        # listen on default 224.0.1.1
+# restrict 224.0.1.1 mask 255.255.255.255 notrust nomodify notrap
+# restrict 192.168.1.0 mask 255.255.255.0 notrust nomodify notrap
+# --- GENERAL CONFIGURATION ---
+
+server   127.127.1.0 # local clock
+fudge 127.127.1.0 stratum 10
+driftfile /var/lib/ntp/drift
+broadcastdelay 0.008
+authenticate yes
+keys     /etc/ntp/keys
